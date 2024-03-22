@@ -22,6 +22,8 @@
   networking.hostName = "laptop-17";
   networking.networkmanager.enable = true;
 
+  services.openssh.enable = true;
+
   # Time zone and 
   time.timeZone = "Europe/London";
 
@@ -46,14 +48,19 @@
   # Touchpad
   services.xserver.libinput.enable = true;
 
-  # Users - For now, user home-manager later.
+  services.xserver = {
+    enable = true;
+    layout = "gb";
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
+
+  programs.hyprland.enable = true;
+
+  # Users
   users.users.mark = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      neovim
-      git
-    ];
   };
 
   # Home-Manager
@@ -61,20 +68,16 @@
     extraSpecialArgs = {inherit inputs; };
     users.mark = import ./home.nix;
   };
-
+  
   # System Default Packages
   environment.systemPackages = with pkgs; [
-    vim
+    neovim
     git
   ];
 
   # Virtualisation
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-
-  # Services
-
-
 
 
   # This option defines the first version of NixOS you have installed on this particular machine,
